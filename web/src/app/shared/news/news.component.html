@@ -1,0 +1,55 @@
+<div>
+  <ul class="nav nav-pills">
+    <li class="nav-item" (click)="fetchNews('business')">
+      <a class="nav-link" routerLink="/pl/business">Business</a>
+    </li>
+    <li class="nav-item" (click)="fetchNews('technology')">
+      <a class="nav-link" routerLink="/pl/technology">Technology</a>
+    </li>
+    <li class="nav-item" (click)="fetchNews('health')">
+      <a class="nav-link" routerLink="/pl/health">Health</a>
+    </li>
+    <li class="nav-item" (click)="fetchNews('science')">
+      <a class="nav-link" routerLink="/pl/science">Science</a>
+    </li>
+    <li class="nav-item" (click)="fetchNews('sports')">
+      <a class="nav-link" routerLink="/pl/sports">Sports</a>
+    </li>
+    <li class="nav-item" (click)="fetchNews('general')">
+      <a class="nav-link" routerLink="/pl/general">General</a>
+    </li>
+    <li class="nav-item" (click)="fetchNews('entertainment')">
+      <a class="nav-link" routerLink="/pl/entertainment">Entertainment</a>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="news">
+  <div align="center">
+    <p></p>
+    <h3 style="margin-bottom: 40px">
+      {{news.category | uppercase}} NEWS FROM {{news.country | uppercase}}
+      <p></p>
+    </h3>
+  </div>
+
+  <div style="margin-bottom: 100px">
+    <div *ngFor="let article of news.articles |  paginate: { itemsPerPage: 5, currentPage: p}"
+         style="border-style: double; margin-left: 20px; margin-right: 20px">
+      <div class="row, content" style="margin-left: 10px">
+        <div>
+          <strong>{{article.title}}</strong>
+        </div>
+        <div>
+          {{article.description}}
+        </div>
+        <div>
+          <b>{{article.date}}</b>
+          <p></p>Source:
+          <a href="{{article.articleUrl}}" target="_blank">{{article.sourceName}}</a>
+        </div>
+      </div>
+    </div>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>
