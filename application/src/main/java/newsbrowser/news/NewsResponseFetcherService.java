@@ -1,7 +1,7 @@
 package newsbrowser.news;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,33 +9,38 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@AllArgsConstructor
-public class NewsResponseFetcherService implements ResponseFetcherService<NewsResponse>
+@RequiredArgsConstructor
+public class NewsResponseFetcherService implements ResponseFetcherService
 {
-    static String BASE_URL = "https://newsapi.org/v2/top-headlines?country={country}&category={category}&apiKey=93c9f3a8624c4327a6565e8fd71ea8a2";
+    static final String API_KEY = "93c9f3a8624c4327a6565e8fd71ea8a2";
+    static final String TOP_HEADLINES_URL = "https://newsapi.org/v2/top-headlines?country={country}&category={category}&apiKey="+API_KEY;
 
     RestTemplate restTemplate;
 
     @Override
-    public NewsResponse fetch(String country, String category)
+    public NewsResponse fetchNewsByCountryAndCategory(String country, String category)
     {
-        Locale locale = new Locale("", country);
-        NewsResponse newsResponse = restTemplate.getForObject(createUri(country, category), NewsResponse.class);
-        newsResponse.setCountry(locale.getDisplayCountry(Locale.US).toLowerCase());
-        newsResponse.setCategory(category);
-
-        return Optional.ofNullable(newsResponse)
-                .orElse(new NewsResponse());
+        News news = restTemplate.getForObject(createUri(country, category), News.class);
+        return NewsResponse.builder()
+                .category(category)
+                .country(isoCountryCodeToCountryName(country))
+                .articles(news.getArticles())
+                .build();
     }
 
     private URI createUri(String country, String category)
     {
         return UriComponentsBuilder
-                .fromUriString(BASE_URL)
+                .fromUriString(TOP_HEADLINES_URL)
                 .build(country, category);
+    }
+
+    private String isoCountryCodeToCountryName(String countryCode)
+    {
+        Locale locale = new Locale("", countryCode);
+        return locale.getDisplayCountry(Locale.US).toLowerCase();
     }
 }

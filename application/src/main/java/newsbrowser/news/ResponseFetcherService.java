@@ -1,6 +1,6 @@
 package newsbrowser.news;
 
-public interface ResponseFetcherService<T>
+public interface ResponseFetcherService
 {
-    T fetch(String country, String category);
+    NewsResponse fetchNewsByCountryAndCategory(String country, String category);
 }

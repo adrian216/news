@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:4200")
 public class NewsResponseRestController
 {
-    ResponseFetcherService<NewsResponse> newsResponseFetcherService;
+    ResponseFetcherService newsResponseFetcherService;
 
     @GetMapping(value = "/{country}/{category}")
     NewsResponse fetchNewsByCountryAndCategory(
             @PathVariable String country, @PathVariable String category)
     {
-        return newsResponseFetcherService.fetch(country, category);
+        return newsResponseFetcherService.fetchNewsByCountryAndCategory(country, category);
     }
 }

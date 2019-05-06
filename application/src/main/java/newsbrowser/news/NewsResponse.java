@@ -1,17 +1,14 @@
 package newsbrowser.news;
 
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.util.List;
 
 @Data
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewsResponse
+class NewsResponse
 {
     String country;
     String category;
