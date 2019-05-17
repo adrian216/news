@@ -2,7 +2,9 @@ package newsbrowser.news;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,18 +17,26 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class NewsResponseFetcherService implements ResponseFetcherService
 {
-    static final String API_KEY = "93c9f3a8624c4327a6565e8fd71ea8a2";
-    static final String TOP_HEADLINES_URL = "https://newsapi.org/v2/top-headlines?country={country}&category={category}&apiKey="+API_KEY;
-
+    String API_KEY;
+    String TOP_HEADLINES_URL;
     RestTemplate restTemplate;
 
-    @Override
-    public NewsResponse fetchNewsByCountryAndCategory(String country, String category)
+    NewsResponseFetcherService( @Value("${news.api-key}") String apiKey,
+                                @Value("${news.api-url}") String topHeadlinesUrl,
+                                RestTemplate theRestTemplate)
     {
-        News news = restTemplate.getForObject(createUri(country, category), News.class);
+        API_KEY = apiKey;
+        TOP_HEADLINES_URL = topHeadlinesUrl;
+        restTemplate = theRestTemplate;
+    }
+
+    @Override
+    public NewsResponse fetchNewsByCountryAndCategory(String countryCode, String category)
+    {
+        News news = restTemplate.getForObject(createUri(countryCode, category), News.class);
         return NewsResponse.builder()
                 .category(category)
-                .country(isoCountryCodeToCountryName(country))
+                .country(isoCountryCodeToCountryName(countryCode))
                 .articles(news.getArticles())
                 .build();
     }
