@@ -1,27 +1,25 @@
 package newsbrowser.news;
 
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 public class NewsResponseFetcherServiceTest
 {
-    @Mock
-    private RestTemplate restTemplate;
-
-    @InjectMocks
+    @Autowired
     private NewsResponseFetcherService newsResponseFetcherService;
 
     @Test
-    public void testFetchNewsByCountryAndCategoryOnce()
+    public void shouldReturnNotNullObjectWithCorrectCountryAndCategory()
     {
-       Mockito.when(restTemplate.getForObject("http://localhost:8080/news/pl/technology", NewsResponse.class))
-               .thenReturn(new NewsResponse());
+        NewsResponse news = newsResponseFetcherService.fetchNewsByCountryAndCategory("pl", "technology");
+        Assertions.assertNotNull(news);
+        Assertions.assertEquals(news.getCategory(), "technology");
+        Assertions.assertEquals(news.getCountry(), "poland");
     }
-
 }
