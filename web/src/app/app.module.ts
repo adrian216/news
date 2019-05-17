@@ -9,6 +9,8 @@ import { AboutComponent } from './about/about.component';
 import { NewsComponent } from './shared/news/news.component';
 import {AppRoutingModule} from './app-routing.module';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxPaginationModule} from 'ngx-pagination';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import {HttpClientModule} from '@angular/common/http';
     NavbarComponent,
     ErrorComponent,
     AboutComponent,
-    NewsComponent
+    NewsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

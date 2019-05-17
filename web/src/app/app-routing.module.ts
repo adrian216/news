@@ -4,6 +4,7 @@ import {ErrorComponent} from './core/error/error.component';
 import {AboutComponent} from './about/about.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {NewsComponent} from './shared/news/news.component';
+import {HttpClientModule} from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), HttpClientModule],
   exports: [RouterModule, NgxPaginationModule]
 })
 export class AppRoutingModule { }
